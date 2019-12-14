@@ -28,7 +28,7 @@
       <v-btn icon>
         <v-icon>mdi-bell</v-icon>
       </v-btn>
-      <v-btn icon large>
+      <v-btn icon large to="me">
         <v-avatar size="32px" item>
           <v-img src="https://cdn.vuetifyjs.com/images/logos/logo.svg" alt="Vuetify" />
         </v-avatar>
@@ -36,7 +36,7 @@
     </v-app-bar>
     <v-content>
       <v-container class="fill-height" fluid>
-        <router-view></router-view>
+        <router-view style="height: 100%;"></router-view>
       </v-container>
     </v-content>
   </v-app>

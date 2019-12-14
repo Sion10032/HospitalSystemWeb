@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div class="d-flex">
+    Me
+  </div>
 </template>
 
 <script>
