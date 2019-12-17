@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire" v-if="$store.state.isCheck">
     <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
       <v-list dense>
         <v-list-item-group v-model="item" color="primary">
@@ -29,8 +29,8 @@
         <v-icon>mdi-bell</v-icon>
       </v-btn>
       <v-btn icon large to="me">
-        <v-avatar size="32px" item>
-          <v-img src="https://cdn.vuetifyjs.com/images/logos/logo.svg" alt="Vuetify" />
+        <v-avatar size="40px" item>
+          <v-img :src="$store.state.isLogin ? 'https://img.yzcdn.cn/vant/cat.jpeg' : 'https://cdn.vuetifyjs.com/images/logos/logo.svg'" alt="Vuetify" />
         </v-avatar>
       </v-btn>
     </v-app-bar>
@@ -44,9 +44,6 @@
 
 <script>
 export default {
-  props: {
-    source: String
-  },
   data: function () {
     return {
       dialog: false,
@@ -62,6 +59,11 @@ export default {
           icon: 'mdi-contacts',
           text: '预约管理',
           to: '/bookings'
+        },
+        {
+          icon: 'mdi-contacts',
+          text: '诊断',
+          to: '/diagnosis'
         },
         {
           icon: 'mdi-history',
@@ -90,6 +92,16 @@ export default {
         }
       ]
     }
+  },
+  created: function () {
+    console.log(this.$store)
   }
 }
 </script>
+
+<style>
+.divider {
+  height: 10px;
+  width: 10px;
+}
+</style>
