@@ -28,11 +28,9 @@
       <div class="d-flex justify-space-between" style="height: 40px">
         <div></div>
         <div class="button-wrapper d-flex justify-center align-center">
-          <v-btn small color="primary" v-if="state !== 2" @click="isNew = true, state = 2">新建病历</v-btn>
-          <div class="divider" v-if="state !== 0"/>
-          <v-btn small color="primary" v-if="state === 1" @click="isNew = false, state = 2">编辑病历</v-btn>
-          <div class="divider" v-if="state > 1"/>
-          <v-btn small color="primary" v-if="state === 2" @click="OnSaveClick">保存病历</v-btn>
+          <v-btn small color="primary" style="margin-left: 10px;" v-if="state !== 2" @click="isNew = true, state = 2">新建病历</v-btn>
+          <v-btn small color="primary" style="margin-left: 10px;" v-if="state === 1" @click="isNew = false, state = 2">编辑病历</v-btn>
+          <v-btn small color="primary" style="margin-left: 10px;" v-if="state === 2" @click="OnSaveClick">保存病历</v-btn>
         </div>
       </div>
       <div class="divider"/>
@@ -77,6 +75,72 @@
           height="60px"
           :disabled="state !== 2"
         ></v-textarea>
+      </v-card>
+      <div class="divider"/>
+      <v-card class="info-wrapper">
+        <div class="overline mb-4">处方单</div>
+        <div v-for="(item, index) in prescription.items" :key="index">
+          <v-row>
+            <v-col>
+              <v-select
+                v-model="item.medicine"
+                :items="$store.state.medicines"
+                item-text="name"
+                label="药品"
+              ></v-select>
+            </v-col>
+            <v-col>
+              <v-text-field
+                label="药品用法"
+                v-model="item.method">
+              </v-text-field>
+            </v-col>
+            <v-col>
+              <v-text-field
+                label="服用频率"
+                v-model="item.ratio">
+              </v-text-field>
+            </v-col>
+            <v-col>
+              <v-text-field
+                label="服用时长"
+                v-model="item.day">
+              </v-text-field>
+            </v-col>
+            <v-col>
+              <v-text-field
+                label="药物数量"
+                v-model="item.count">
+              </v-text-field>
+            </v-col>
+            <v-col>
+              <v-text-field
+                label="数量单位"
+                v-model="item.count_unit">
+              </v-text-field>
+            </v-col>
+            <v-col>
+              <v-text-field
+                label="每次用量"
+                v-model="item.dosage">
+              </v-text-field>
+            </v-col>
+            <v-col>
+              <v-text-field
+                label="用量单位"
+                v-model="item.dosage_unit">
+              </v-text-field>
+            </v-col>
+            <v-col class="col-auto d-flex align-center">
+              <v-btn text icon color="grey" @click="deleteMedicine(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
+        <div>
+          <v-btn text small @click="createMedicine">新增药品</v-btn>
+        </div>
       </v-card>
     </v-container>
     <v-container v-if="state === 2" class="flex-grow-0 flex-shrink-0 d-flex" style="width: 180px;">
@@ -128,6 +192,10 @@ export default {
       ],
       diagnosis: '',
       detail: '',
+      prescription: {
+        patient: -1,
+        items: []
+      },
       isNew: true,
       state: 0 // 0为空闲，1为查看，2为编辑
     }
@@ -147,6 +215,28 @@ export default {
 
       }
       this.state = 1
+    },
+    createPrescription: function () {
+      this.prescriptions.push({
+        items: []
+      })
+    },
+    createMedicine: function () {
+      this.prescription.items.push({
+        medicine: null,
+        method: '',
+        ratio: '',
+        days: null,
+        count: null,
+        count_unit: '',
+        dosage: '',
+        dosage_unit: '',
+        commet: '',
+        skin_test: ''
+      })
+    },
+    deleteMedicine: function (index) {
+      this.prescription.items.splice(index, 1)
     }
   }
 }

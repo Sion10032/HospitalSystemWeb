@@ -9,15 +9,20 @@ import vuetify from './plugins/vuetify'
 Vue.use(VueAxios, axios)
 
 Vue.config.productionTip = false
-axios.defaults.baseURL = 'http://47.106.164.144:8000/api/'
 Vue.prototype.$axios = axios
+axios.defaults.baseURL = 'http://47.106.164.144:8000/api/'
+if (localStorage.getItem('access')) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access')
+}
 
 axios.all([
-  axios({ methods: 'get', url: '/departments/' }),
-  axios({ methods: 'get', url: '/reservation-time/' })
-]).then(axios.spread((department, bookingTimes) => {
+  axios({ method: 'get', url: '/departments/' }),
+  axios({ method: 'get', url: '/reservation-time/' }),
+  axios({ method: 'get', url: '/medicine/' })
+]).then(axios.spread((department, bookingTimes, medicine) => {
   store.commit('setDepartment', department.data)
   store.commit('setBookingTimes', bookingTimes.data)
+  store.commit('setMedicines', medicine.data)
 })).then(async () => {
   if (localStorage.getItem('refresh')) {
     await axios({

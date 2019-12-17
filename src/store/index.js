@@ -17,7 +17,8 @@ export default new Vuex.Store({
     isCheck: false,
     department: [],
     bookingTimes: [],
-    doctors: {}
+    doctors: {},
+    medicines: []
   },
   getters: {
     getLab: function (state) {
@@ -75,6 +76,11 @@ export default new Vuex.Store({
     },
     addDoctors: function (state, doctors) {
       Vue.set(state.doctors, doctors.id, doctors.docs)
+    },
+    setMedicines: function (state, medicines) {
+      for (let it of medicines) {
+        state.medicines.push(it)
+      }
     }
   },
   actions: {
