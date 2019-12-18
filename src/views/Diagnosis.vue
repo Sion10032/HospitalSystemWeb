@@ -77,17 +77,18 @@
         ></v-textarea>
       </v-card>
       <div class="divider"/>
-      <v-card class="info-wrapper">
+      <v-card class="info-wrapper" v-if="state > 0">
         <div class="overline mb-4">处方单</div>
-        <div v-for="(item, index) in prescription.items" :key="index">
+        <div v-for="(item, index) in prescription.items" :key="index" style="margin: -12px 0 -32px 0;">
           <v-row>
-            <v-col>
+            <v-col md="2">
               <v-select
                 v-model="item.medicine"
                 :items="$store.state.medicines"
                 item-text="name"
-                label="药品"
-              ></v-select>
+                item-value="id"
+                label="药品">
+              </v-select>
             </v-col>
             <v-col>
               <v-text-field
@@ -104,7 +105,7 @@
             <v-col>
               <v-text-field
                 label="服用时长"
-                v-model="item.day">
+                v-model="item.days">
               </v-text-field>
             </v-col>
             <v-col>
@@ -138,7 +139,7 @@
             </v-col>
           </v-row>
         </div>
-        <div>
+        <div style="margin-top: 24px;">
           <v-btn text small @click="createMedicine">新增药品</v-btn>
         </div>
       </v-card>
@@ -223,14 +224,14 @@ export default {
     },
     createMedicine: function () {
       this.prescription.items.push({
-        medicine: null,
-        method: '',
-        ratio: '',
-        days: null,
-        count: null,
-        count_unit: '',
-        dosage: '',
-        dosage_unit: '',
+        medicine: 1,
+        method: '口服',
+        ratio: '3次/天',
+        days: 7,
+        count: 1,
+        count_unit: '盒',
+        dosage: '1',
+        dosage_unit: '粒',
         commet: '',
         skin_test: ''
       })

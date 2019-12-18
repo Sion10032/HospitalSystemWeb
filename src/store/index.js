@@ -18,8 +18,15 @@ export default new Vuex.Store({
     department: [],
     bookingTimes: [],
     doctors: {},
+    payTypes: [],
     medicineTypes: [],
-    medicines: []
+    medicines: [],
+    payMethods: [
+      { id: 1, name: '现金' },
+      { id: 2, name: '银联' },
+      { id: 3, name: '支付宝' },
+      { id: 4, name: '微信' }
+    ]
   },
   getters: {
     getLab: function (state) {
@@ -66,17 +73,27 @@ export default new Vuex.Store({
       state.isCheck = isCheck
     },
     setDepartment: function (state, department) {
+      state.department.splice(0, state.department.length)
       for (let it of department) {
         state.department.push(it)
       }
     },
     setBookingTimes: function (state, bookingTimes) {
+      state.bookingTimes.splice(0, state.bookingTimes.length)
       for (let it of bookingTimes) {
         state.bookingTimes.push(it)
       }
     },
     addDoctors: function (state, doctors) {
       Vue.set(state.doctors, doctors.id, doctors.docs)
+    },
+    setPayTypes: function (state, payTypes) {
+      state.payTypes.splice(0, state.payTypes.length)
+      for (let it of payTypes) {
+        if (it.id > 3) {
+          state.payTypes.push(it)
+        }
+      }
     },
     setMedicineTypes: function (state, medicineTypes) {
       state.medicineTypes.splice(0, state.medicineTypes.length)
