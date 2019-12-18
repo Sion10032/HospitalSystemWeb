@@ -18,10 +18,12 @@ if (localStorage.getItem('access')) {
 axios.all([
   axios({ method: 'get', url: '/departments/' }),
   axios({ method: 'get', url: '/reservation-time/' }),
+  axios({ method: 'get', url: '/medicine-types/' }),
   axios({ method: 'get', url: '/medicine/' })
-]).then(axios.spread((department, bookingTimes, medicine) => {
+]).then(axios.spread((department, bookingTimes, mType, medicine) => {
   store.commit('setDepartment', department.data)
   store.commit('setBookingTimes', bookingTimes.data)
+  store.commit('setMedicineTypes', mType.data)
   store.commit('setMedicines', medicine.data)
 })).then(async () => {
   if (localStorage.getItem('refresh')) {

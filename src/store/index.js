@@ -18,6 +18,7 @@ export default new Vuex.Store({
     department: [],
     bookingTimes: [],
     doctors: {},
+    medicineTypes: [],
     medicines: []
   },
   getters: {
@@ -77,7 +78,14 @@ export default new Vuex.Store({
     addDoctors: function (state, doctors) {
       Vue.set(state.doctors, doctors.id, doctors.docs)
     },
+    setMedicineTypes: function (state, medicineTypes) {
+      state.medicineTypes.splice(0, state.medicineTypes.length)
+      for (let it of medicineTypes) {
+        state.medicineTypes.push(it)
+      }
+    },
     setMedicines: function (state, medicines) {
+      state.medicines.splice(0, state.medicines.length)
       for (let it of medicines) {
         state.medicines.push(it)
       }
