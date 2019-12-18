@@ -62,6 +62,11 @@ export default {
         },
         {
           icon: 'mdi-contacts',
+          text: '叫号',
+          to: '/callp'
+        },
+        {
+          icon: 'mdi-contacts',
           text: '诊断',
           to: '/diagnosis'
         },
@@ -74,6 +79,11 @@ export default {
           icon: 'mdi-content-copy',
           text: '药房管理',
           to: '/medicine'
+        },
+        {
+          icon: 'mdi-content-copy',
+          text: '配药',
+          to: '/medhandout'
         },
         {
           icon: 'mdi-settings',

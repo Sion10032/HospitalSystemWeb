@@ -36,7 +36,8 @@ export default new Vuex.Store({
       { text: '配药师', value: '227' },
       // { text: '财务审核人员', value: '' },
       { text: '分诊台工作人员', value: '234' }
-    ]
+    ],
+    handoutStatus: [ '待配药', '配药中', '待取药', '取药中', '完成' ]
   },
   getters: {
     getLab: function (state) {
@@ -64,6 +65,15 @@ export default new Vuex.Store({
             if (it.id === id) {
               return it.profile.name
             }
+          }
+        }
+      }
+    },
+    getMedicine: function (state) {
+      return function (id) {
+        for (let it of state.medicines) {
+          if (it.id === id) {
+            return it.name
           }
         }
       }

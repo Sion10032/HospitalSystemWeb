@@ -5,18 +5,18 @@
         <div class="overline mb-4">病人信息</div>
         <v-row style="height: 32px;" no-gutters>
           <v-col>
-            <p class="text">姓名：{{ 'Name' }}</p>
+            <p class="text">姓名：{{ patient.profile.name }}</p>
           </v-col>
           <v-col>
-            <p class="text">性别：{{ 'Gender' }}</p>
+            <p class="text">性别：{{ patient.profile.gender ? '男' : '女' }}</p>
           </v-col>
           <v-col>
-            <p class="text">年龄：{{ 'Age' }}</p>
+            <p class="text">年龄：{{ 24 }}</p>
           </v-col>
         </v-row>
         <v-row style="height: 32px;" no-gutters>
           <v-col>
-            <p class="text">姓名拼音：{{ 'PIN YIN' }}</p>
+            <p class="text">姓名拼音：{{ pinyin }}</p>
           </v-col>
           <v-col>
           </v-col>
@@ -166,8 +166,12 @@
 
 <script>
 export default {
+  props: {
+    patientId: String
+  },
   data: function () {
     return {
+      patient: null,
       record: -1,
       records: [
         {
@@ -203,6 +207,18 @@ export default {
       state: 0 // 0为空闲，1为查看，2为编辑
     }
   },
+  computed: {
+    pinyin: function () {
+      if (!this.patient) {
+        return 'PIN YIN'
+      }
+      let res = ''
+      for (let ch of this.$pinyin(this.patient.profile.name)) {
+        res += ch[0] + ' '
+      }
+      return res
+    }
+  },
   watch: {
     record: function (newValue, oldValue) {
       if (newValue !== undefined && this.state === 2) {
@@ -211,51 +227,59 @@ export default {
       }
     }
   },
+  created: function () {
+    this.$axios({
+      method: 'get',
+      url: '/users/' + this.patientId + '/'
+    }).then((res) => {
+      this.patient = res.data
+    })
+  },
   methods: {
     OnSaveClick: function () {
-      console.log(this.isNew)
       if (this.isNew) {
+        // ToDo 部门ID
         // 病历
-        // this.$axios({
-        //   method: 'post',
-        //   url: '/medical-records/',
-        //   data: {
-        //     patient: 23,
-        //     department: 223,
-        //     onset_date: new Date().toLocaleDateString().split('/').join('-'),
-        //     diagnosis: this.diagnosis,
-        //     detail: this.detail
-        //   }
-        // }).then((res) => {
-        //   alert('创建成功')
-        // })
+        this.$axios({
+          method: 'post',
+          url: '/medical-records/',
+          data: {
+            patient: this.patientId,
+            department: 223,
+            onset_date: new Date().toLocaleDateString().split('/').join('-'),
+            diagnosis: this.diagnosis,
+            detail: this.detail
+          }
+        }).then((res) => {
+          alert('创建成功')
+        })
         // 处方
-        // this.$axios({
-        //   method: 'post',
-        //   url: '/prescriptions/',
-        //   data: {
-        //     patient: 23,
-        //     items: this.prescription.items
-        //   }
-        // }).then((res) => {
-        //   alert('创建成功')
-        // })
+        this.$axios({
+          method: 'post',
+          url: '/prescriptions/',
+          data: {
+            patient: this.patientId,
+            items: this.prescription.items
+          }
+        }).then((res) => {
+          alert('创建成功')
+        })
         // 化验
-        // let tLaps = []
-        // for (let it of this.labs) {
-        //   tLaps.push({ laboratory_type: it })
-        // }
-        // this.$axios({
-        //   method: 'post',
-        //   url: '/laboratories/',
-        //   data: {
-        //     patient: 23,
-        //     executor: 223,
-        //     items: tLaps
-        //   }
-        // }).then((res) => {
-        //   alert('创建成功')
-        // })
+        let tLaps = []
+        for (let it of this.labs) {
+          tLaps.push({ laboratory_type: it })
+        }
+        this.$axios({
+          method: 'post',
+          url: '/laboratories/',
+          data: {
+            patient: this.patientId,
+            executor: 223,
+            items: tLaps
+          }
+        }).then((res) => {
+          alert('创建成功')
+        })
       }
       this.state = 1
     },

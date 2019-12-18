@@ -20,9 +20,9 @@
         <v-card>
           <v-list dense>
             <v-subheader>当前等待列表</v-subheader>
-            <v-list-item-group v-model="item" color="primary">
+            <v-list-item-group v-if="rawQueue" v-model="item" color="primary">
               <v-list-item
-                v-for="(item, i) in items"
+                v-for="(item, i) in queue"
                 :key="i">
                 <v-list-item-content>
                   <v-list-item-title v-text="item.text"></v-list-item-title>
@@ -32,8 +32,8 @@
           </v-list>
         </v-card>
         <v-card style="padding: 0 10px;">
-          <v-text-field :rules="rules">
-            <v-icon slot="append" color="red">mdi-plus</v-icon>
+          <v-text-field v-model="inQueue">
+            <v-icon slot="append" color="red" @click="add2Queue">mdi-plus</v-icon>
           </v-text-field>
         </v-card>
       </v-col>
@@ -61,28 +61,12 @@ export default {
         mdiAccount
       },
       item: 0,
-      items: [
-        { text: '122' },
-        { text: '123' },
-        { text: '124' },
-        { text: '125' },
-        { text: '126' },
-        { text: '127' },
-        { text: '128' }
-      ],
+      inQueue: '23,,,,26',
+      rawQueue: null,
       headers: [
-        {
-          text: '姓名',
-          value: 'name'
-        },
-        {
-          text: '科室',
-          value: 'lab'
-        },
-        {
-          text: '状态',
-          value: 'status'
-        }
+        { text: '姓名', value: 'name' },
+        { text: '科室', value: 'lab' },
+        { text: '状态', value: 'status' }
       ],
       doctors: [
         {
@@ -126,6 +110,55 @@ export default {
           status: '空闲'
         }
       ]
+    }
+  },
+  computed: {
+    queue: function () {
+      let result = []
+      for (let k in this.rawQueue.department) {
+        for (let it of this.rawQueue.department[k]) {
+          result.push({
+            text: it.profile.name,
+            value: it.id
+          })
+        }
+      }
+      return result
+    }
+  },
+  created: function () {
+    this.getWaitQueue()
+    // setInterval(this.getWaitQueue, 5000)
+  },
+  methods: {
+    add2Queue: function () {
+      let tP = this.inQueue.split(',')
+      let params = { patient: tP[0] }
+      if (tP[4]) {
+        params.reservation = tP[4]
+      } else {
+        params.department = tP[1]
+        params.doctor = tP[2]
+        params.pay = tP[3]
+      }
+      this.$axios({
+        method: 'post',
+        url: '/wait-queue/',
+        data: params
+      }).then((res) => {
+        alert('排队成功！')
+      }).catch((err) => {
+        alert(err.response ? err.response.data.detail : 'Error')
+      })
+    },
+    getWaitQueue: function () {
+      this.$axios({
+        method: 'get',
+        url: '/wait-queue/'
+      }).then((res) => {
+        console.log(res.data)
+        this.rawQueue = res.data
+      })
     }
   }
 }
