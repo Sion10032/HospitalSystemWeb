@@ -27,7 +27,16 @@ export default new Vuex.Store({
       { id: 3, name: '支付宝' },
       { id: 4, name: '微信' }
     ],
-    labTypes: []
+    labTypes: [],
+    works: [
+      { text: '普通医生', value: '229' },
+      { text: '专家医生', value: '228' },
+      { text: '挂号人员', value: '235' },
+      { text: '收银员', value: '230' },
+      { text: '配药师', value: '227' },
+      // { text: '财务审核人员', value: '' },
+      { text: '分诊台工作人员', value: '234' }
+    ]
   },
   getters: {
     getLab: function (state) {
@@ -91,9 +100,7 @@ export default new Vuex.Store({
     setPayTypes: function (state, payTypes) {
       state.payTypes.splice(0, state.payTypes.length)
       for (let it of payTypes) {
-        if (it.id > 3) {
-          state.payTypes.push(it)
-        }
+        state.payTypes.push(it)
       }
     },
     setMedicineTypes: function (state, medicineTypes) {

@@ -67,7 +67,10 @@
         </v-textarea>
       </v-card>
       <v-card class="info-wrapper" v-if="state > 0">
-        <div class="overline mb-4">处方单</div>
+        <div class="d-flex justify-space-between overline mb-4">
+          处方单
+          <v-btn v-if="state === 2" text small @click="createMedicine">新增药品</v-btn>
+        </div>
         <div v-for="(item, index) in prescription.items" :key="index" style="margin: -12px 0 -32px 0;">
           <v-row>
             <v-col md="2">
@@ -127,9 +130,6 @@
               </v-btn>
             </v-col>
           </v-row>
-        </div>
-        <div v-if="state === 2" style="margin-top: 24px;">
-          <v-btn text small @click="createMedicine">新增药品</v-btn>
         </div>
       </v-card>
       <v-card class="info-wrapper" v-if="state > 0">
@@ -215,7 +215,47 @@ export default {
     OnSaveClick: function () {
       console.log(this.isNew)
       if (this.isNew) {
-
+        // 病历
+        // this.$axios({
+        //   method: 'post',
+        //   url: '/medical-records/',
+        //   data: {
+        //     patient: 23,
+        //     department: 223,
+        //     onset_date: new Date().toLocaleDateString().split('/').join('-'),
+        //     diagnosis: this.diagnosis,
+        //     detail: this.detail
+        //   }
+        // }).then((res) => {
+        //   alert('创建成功')
+        // })
+        // 处方
+        // this.$axios({
+        //   method: 'post',
+        //   url: '/prescriptions/',
+        //   data: {
+        //     patient: 23,
+        //     items: this.prescription.items
+        //   }
+        // }).then((res) => {
+        //   alert('创建成功')
+        // })
+        // 化验
+        // let tLaps = []
+        // for (let it of this.labs) {
+        //   tLaps.push({ laboratory_type: it })
+        // }
+        // this.$axios({
+        //   method: 'post',
+        //   url: '/laboratories/',
+        //   data: {
+        //     patient: 23,
+        //     executor: 223,
+        //     items: tLaps
+        //   }
+        // }).then((res) => {
+        //   alert('创建成功')
+        // })
       }
       this.state = 1
     },
