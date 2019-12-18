@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid style="max-width: 1200px;">
     <div class="d-flex justify-center align-center">
       <div style="width: 150px;">
         <v-select
@@ -34,13 +34,13 @@
           item-text="name"
           item-value="id"
           label="付款方式"
-          :disabled="payRecord.receive !== null">
+          :disabled="isPaid">
         </v-select>
         <v-text-field
           style="margin-left: 20px;"
           v-model="payReal"
           label="付款金额"
-          :disabled="payRecord.receive !== null">
+          :disabled="isPaid">
         </v-text-field>
         <v-text-field
           v-if="payMethod === 1"
@@ -50,10 +50,10 @@
           disabled>
         </v-text-field>
         <v-btn
+          v-if="!isPaid"
           style="width: 80px; height: 30px; margin-left: 20px;"
           color="primary"
-          @click="checkout"
-          :disabled="payRecord.receive !== null">
+          @click="checkout">
           结算
         </v-btn>
       </div>
@@ -67,7 +67,6 @@ export default {
     return {
       payType: null,
       payId: null,
-      isPaying: false,
       payRecord: null,
       payMethod: 0,
       payMount: 0, // 总价
@@ -83,6 +82,12 @@ export default {
   computed: {
     payRefund: function () {
       return this.payReal - this.payMount
+    },
+    isPaying: function () {
+      return this.payRecord && !this.payRecord.receive
+    },
+    isPaid: function () {
+      return Boolean(this.payRecord && this.payRecord.receive)
     }
   },
   watch: {
@@ -101,12 +106,15 @@ export default {
           this.payReal = this.payRecord.receive
           this.payMethod = this.payRecord.method
         }
-        this.isPaying = !this.payRecord.receive
       }
     }
   },
   methods: {
     commit: function () {
+      if (!this.payType || !this.payId) {
+        alert('输入不合法！')
+        return
+      }
       this.$axios({
         method: 'post',
         url: '/pay-records/',
