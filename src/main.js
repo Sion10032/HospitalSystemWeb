@@ -20,13 +20,15 @@ axios.all([
   axios({ method: 'get', url: '/reservation-time/' }),
   axios({ method: 'get', url: '/pay-types/' }),
   axios({ method: 'get', url: '/medicine-types/' }),
-  axios({ method: 'get', url: '/medicine/' })
-]).then(axios.spread((department, bookingTimes, payTypes, mTypes, medicine) => {
+  axios({ method: 'get', url: '/medicine/' }),
+  axios({ method: 'get', url: '/laboratory-types/' })
+]).then(axios.spread((department, bookingTimes, payTypes, mTypes, medicine, labTypes) => {
   store.commit('setDepartment', department.data)
   store.commit('setBookingTimes', bookingTimes.data)
   store.commit('setPayTypes', payTypes.data)
   store.commit('setMedicineTypes', mTypes.data)
   store.commit('setMedicines', medicine.data)
+  store.commit('setLabTypes', labTypes.data)
 })).then(async () => {
   if (localStorage.getItem('refresh')) {
     await axios({

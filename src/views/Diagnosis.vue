@@ -24,8 +24,7 @@
           </v-col>
         </v-row>
       </v-card>
-      <div class="divider"/>
-      <div class="d-flex justify-space-between" style="height: 40px">
+      <div class="d-flex justify-space-between info-wrapper" style="padding: 5px 0;">
         <div></div>
         <div class="button-wrapper d-flex justify-center align-center">
           <v-btn small color="primary" style="margin-left: 10px;" v-if="state !== 2" @click="isNew = true, state = 2">新建病历</v-btn>
@@ -33,50 +32,40 @@
           <v-btn small color="primary" style="margin-left: 10px;" v-if="state === 2" @click="OnSaveClick">保存病历</v-btn>
         </div>
       </div>
-      <div class="divider"/>
       <v-card class="info-wrapper" v-if="state !== 0">
         <div class="overline mb-4">病情分析</div>
         <v-text-field
           label="病情诊断"
-          hint="医生对病人的诊断"
           v-model="diagnosis"
-          :disabled="state !== 2">
+          :disabled="state !== 2"
+          no-resize>
         </v-text-field>
-        <div class="divider"/>
         <v-textarea
-          label="病情描述"
-          hint="医生对病情的详细描述（可空）"
-          height="60px"
-          counter="200"
+          label="病情描述(Optional)"
+          rows="2"
           v-model="detail"
           :disabled="state !== 2"
-        ></v-textarea>
-        <div class="divider"/>
+          counter no-resize>
+        </v-textarea>
         <v-textarea
-          label="病人自述"
-          hint="病人对病情的描述（可空）"
-          counter="200"
-          height="60px"
+          label="病人自述(Optional)"
+          rows="2"
           :disabled="state !== 2"
-        ></v-textarea>
-        <div class="divider"/>
+          counter no-resize>
+        </v-textarea>
         <v-textarea
-          label="病人病史"
-          hint="病人的病史（可空）"
-          counter="200"
-          height="60px"
+          label="病人病史(Optional)"
+          rows="2"
           :disabled="state !== 2"
-        ></v-textarea>
-        <div class="divider"/>
+          counter no-resize>
+        </v-textarea>
         <v-textarea
-          label="病人药物史"
-          hint="病人的药物史（可空）"
-          counter="200"
-          height="60px"
+          label="病人药物史(Optional)"
+          rows="2"
           :disabled="state !== 2"
-        ></v-textarea>
+          counter no-resize>
+        </v-textarea>
       </v-card>
-      <div class="divider"/>
       <v-card class="info-wrapper" v-if="state > 0">
         <div class="overline mb-4">处方单</div>
         <div v-for="(item, index) in prescription.items" :key="index" style="margin: -12px 0 -32px 0;">
@@ -139,13 +128,25 @@
             </v-col>
           </v-row>
         </div>
-        <div style="margin-top: 24px;">
+        <div v-if="state === 2" style="margin-top: 24px;">
           <v-btn text small @click="createMedicine">新增药品</v-btn>
         </div>
       </v-card>
+      <v-card class="info-wrapper" v-if="state > 0">
+        <div class="overline mb-4">化验单</div>
+        <v-select
+          v-model="labs"
+          :items="$store.state.labTypes"
+          item-text="name"
+          item-value="id"
+          multiple
+          chips
+          :disabled="state !== 2">
+        </v-select>
+      </v-card>
     </v-container>
     <v-container v-if="state === 2" class="flex-grow-0 flex-shrink-0 d-flex" style="width: 180px;">
-      <v-card class="align-self-stretch flex-grow-1">
+      <v-card class="flex-grow-1">
         <div class="overline mb-4" style="margin: 15px">病历模板</div>
         <v-list dense>
           <v-list-item-group v-model="record" color="primary">
@@ -197,6 +198,7 @@ export default {
         patient: -1,
         items: []
       },
+      labs: [],
       isNew: true,
       state: 0 // 0为空闲，1为查看，2为编辑
     }
@@ -248,9 +250,7 @@ export default {
   margin: 0 5px;
 }
 .info-wrapper {
-  padding: 15px;
-}
-.divider {
-  height: 20px;
+  padding: 16px;
+  margin-bottom: 20px;
 }
 </style>

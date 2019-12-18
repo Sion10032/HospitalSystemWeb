@@ -26,7 +26,8 @@ export default new Vuex.Store({
       { id: 2, name: '银联' },
       { id: 3, name: '支付宝' },
       { id: 4, name: '微信' }
-    ]
+    ],
+    labTypes: []
   },
   getters: {
     getLab: function (state) {
@@ -105,6 +106,12 @@ export default new Vuex.Store({
       state.medicines.splice(0, state.medicines.length)
       for (let it of medicines) {
         state.medicines.push(it)
+      }
+    },
+    setLabTypes: function (state, labTypes) {
+      state.labTypes.splice(0, state.labTypes.length)
+      for (let it of labTypes) {
+        state.labTypes.push(it)
       }
     }
   },
