@@ -100,7 +100,7 @@ export default {
         this.items.unshift({
           icon: 'mdi-contacts',
           text: '诊断',
-          to: '/diagnosis'
+          to: '/diagnosis/0'
         })
         this.items.unshift({
           icon: 'mdi-contacts',

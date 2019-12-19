@@ -32,7 +32,7 @@ export default {
   },
   created: function () {
     // this.getWaitQueue()
-    setInterval(this.getWaitQueue, 5000)
+    setInterval(() => this.getWaitQueue(), 5000)
   },
   methods: {
     onCallClick: function () {

@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex justify-center" fluid>
-    <v-container class="d-flex flex-column flex-grow-1">
+    <v-container v-if="patient" class="d-flex flex-column flex-grow-1">
       <v-card class="info-wrapper">
         <div class="overline mb-4">病人信息</div>
         <v-row style="height: 32px;" no-gutters>
@@ -221,6 +221,13 @@ export default {
     }
   },
   watch: {
+    patientId: function (newValue, oldValue) {
+      if (newValue === localStorage.getItem('curPatient')) {
+        this.loadInfo()
+      } else {
+        this.$router.push({ name: 'diagnosis', params: { patientId: localStorage.getItem('curPatient') } })
+      }
+    },
     record: function (newValue, oldValue) {
       if (newValue !== undefined && this.state === 2) {
         this.detail = this.records[newValue].value.detail
@@ -229,17 +236,21 @@ export default {
     }
   },
   created: function () {
-    if (!this.patientId && localStorage.getItem('curPatient')) {
+    if (localStorage.getItem('curPatient') !== 0 && this.patientId !== localStorage.getItem('curPatient')) {
       this.$router.push({ name: 'diagnosis', params: { patientId: localStorage.getItem('curPatient') } })
+    } else {
+      this.loadInfo()
     }
-    this.$axios({
-      method: 'get',
-      url: '/users/' + this.patientId + '/'
-    }).then((res) => {
-      this.patient = res.data
-    })
   },
   methods: {
+    loadInfo: function () {
+      this.$axios({
+        method: 'get',
+        url: '/users/' + this.patientId + '/'
+      }).then((res) => {
+        this.patient = res.data
+      })
+    },
     OnSaveClick: function () {
       if (this.isNew) {
         // ToDo 部门ID
