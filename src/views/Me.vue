@@ -170,7 +170,7 @@ export default {
             this.$store.commit('setUser', res.data)
             this.$store.commit('setLogin', true)
             alert('登陆成功')
-            this.$router.push('/me')
+            location.reload()
           }
         })
       }).catch((err) => {
@@ -193,7 +193,7 @@ export default {
             id: '请登录', email: '', username: '', profile: {}
           })
           this.$store.commit('setLogin', false)
-          this.$router.push('/me')
+          location.reload()
         }
       }).catch((err) => {
         console.log(err)
@@ -219,10 +219,9 @@ export default {
           }
         }
       }).then((result) => {
-        if (result.status === 201) {
-          alert('注册成功')
-          this.isReg = false
-        }
+        alert('注册成功')
+        this.isReg = false
+        location.reload()
       }).catch((err) => {
         console.log(err)
         alert('注册失败')

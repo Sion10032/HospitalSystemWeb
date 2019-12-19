@@ -13,6 +13,7 @@ export default new Vuex.Store({
         address: ''
       }
     },
+    userGroup: [],
     isLogin: false,
     isCheck: false,
     department: [],
@@ -85,6 +86,12 @@ export default new Vuex.Store({
       state.user.email = user.email
       state.user.username = user.username
       state.user.profile = user.profile
+    },
+    setUserGroup: function (state, userGroup) {
+      state.userGroup.splice(0, state.userGroup.length)
+      for (let it of userGroup) {
+        state.userGroup.push(it)
+      }
     },
     setLogin: function (state, loginState) {
       state.isLogin = loginState

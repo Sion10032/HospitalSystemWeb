@@ -5,7 +5,7 @@
         <v-card>
           <v-card-text>
             <v-icon>{{ icons.mdiAccount }}</v-icon>
-            当前等待人数：111
+            当前等待人数：{{ queue.length }}
           </v-card-text>
         </v-card>
       </v-col>

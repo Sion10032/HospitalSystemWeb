@@ -62,6 +62,16 @@ axios.all([
     })
   }
 }).then(async () => {
+  if (localStorage.getItem('access')) {
+    // 刷新用户信息
+    await axios({
+      method: 'get',
+      url: '/users/' + store.state.user.id + '/groups/'
+    }).then((result) => {
+      store.commit('setUserGroup', result.data)
+    })
+  }
+}).then(async () => {
   let urls = []
   for (let it of store.state.department) {
     urls.push(axios({
