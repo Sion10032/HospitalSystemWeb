@@ -31,14 +31,24 @@ export default {
     }
   },
   created: function () {
-    this.getWaitQueue()
-    // setInterval(this.getWaitQueue, 5000)
+    // this.getWaitQueue()
+    setInterval(this.getWaitQueue, 5000)
   },
   methods: {
     onCallClick: function () {
-      // ToDo：出队并转换页面
-      this.$router.push({ name: 'diagnosis', params: { patientId: 23 } })
-    //   this.$axios()
+      if (localStorage.getItem('curPatient')) {
+        alert('请先完成当前就诊！')
+        this.$router.push({ name: 'diagnosis', params: { patientId: localStorage.getItem('curPatient') } })
+        return
+      }
+      this.$axios({
+        method: 'get',
+        url: '/wait-queue/?top=1&department=' + localStorage.getItem('department')
+      }).then((res) => {
+        localStorage.setItem('curPatient', res.data.id)
+        alert('准备开始诊断病人：' + res.data.profile.name)
+        this.$router.push({ name: 'diagnosis', params: { patientId: res.data.id } })
+      })
     },
     getWaitQueue: function () {
       this.$axios({

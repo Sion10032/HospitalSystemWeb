@@ -166,6 +166,7 @@
 
 <script>
 export default {
+  // ToDo: 完成诊断后设置病历为不可编辑，并去除localStorage中的curPatient
   props: {
     patientId: String
   },
@@ -228,6 +229,9 @@ export default {
     }
   },
   created: function () {
+    if (!this.patientId && localStorage.getItem('curPatient')) {
+      this.$router.push({ name: 'diagnosis', params: { patientId: localStorage.getItem('curPatient') } })
+    }
     this.$axios({
       method: 'get',
       url: '/users/' + this.patientId + '/'
