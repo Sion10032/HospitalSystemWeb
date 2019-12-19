@@ -26,10 +26,11 @@
       </v-card>
       <div class="d-flex justify-space-between info-wrapper" style="padding: 5px 0;">
         <div></div>
-        <div class="button-wrapper d-flex justify-center align-center">
+        <div class="button-wrapper d-flex justify-center align-center" v-if="!isEnd">
           <v-btn small color="primary" style="margin-left: 10px;" v-if="state !== 2" @click="isNew = true, state = 2">新建病历</v-btn>
           <v-btn small color="primary" style="margin-left: 10px;" v-if="state === 1" @click="isNew = false, state = 2">编辑病历</v-btn>
           <v-btn small color="primary" style="margin-left: 10px;" v-if="state === 2" @click="OnSaveClick">保存病历</v-btn>
+          <v-btn small color="primary" style="margin-left: 10px;" v-if="state === 1" @click="OnEndClick">结束诊断</v-btn>
         </div>
       </div>
       <v-card class="info-wrapper" v-if="state !== 0">
@@ -167,9 +168,7 @@
 <script>
 export default {
   // ToDo: 完成诊断后设置病历为不可编辑，并去除localStorage中的curPatient
-  props: {
-    patientId: String
-  },
+  props: [ 'patientId' ],
   data: function () {
     return {
       patient: null,
@@ -204,6 +203,8 @@ export default {
         items: []
       },
       labs: [],
+      res: null,
+      isEnd: false,
       isNew: true,
       state: 0 // 0为空闲，1为查看，2为编辑
     }
@@ -266,6 +267,8 @@ export default {
             detail: this.detail
           }
         }).then((res) => {
+          this.res = res.data
+          console.log(res)
           alert('创建成功')
         })
         // 处方
@@ -297,6 +300,19 @@ export default {
         })
       }
       this.state = 1
+    },
+    OnEndClick: function () {
+      this.axios({
+        method: 'put',
+        url: '/medical-records/' + this.res.id + '/',
+        data: {
+          can_modify: false
+        }
+      }).then((res) => {
+        this.isEnd = true
+        localStorage.setItem('curPatient', '')
+        alert('结束诊断！')
+      })
     },
     createPrescription: function () {
       this.prescriptions.push({

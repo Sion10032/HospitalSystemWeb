@@ -5,7 +5,7 @@
         <v-card>
           <v-card-text>
             <v-icon>{{ icons.mdiAccount }}</v-icon>
-            当前等待人数：{{ queue.length }}
+            当前等待人数：{{ rawQueue && rawQueue.length }}
           </v-card-text>
         </v-card>
       </v-col>
@@ -22,10 +22,10 @@
             <v-subheader>当前等待列表</v-subheader>
             <v-list-item-group v-if="rawQueue" v-model="item" color="primary">
               <v-list-item
-                v-for="(item, i) in queue"
+                v-for="(item, i) in rawQueue"
                 :key="i">
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.text"></v-list-item-title>
+                  <v-list-item-title v-text="item.profile.name"></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -112,22 +112,8 @@ export default {
       ]
     }
   },
-  computed: {
-    queue: function () {
-      let result = []
-      for (let k in this.rawQueue.department) {
-        for (let it of this.rawQueue.department[k]) {
-          result.push({
-            text: it.profile.name,
-            value: it.id
-          })
-        }
-      }
-      return result
-    }
-  },
   created: function () {
-    setInterval(() => this.getWaitQueue(), 5000)
+    setInterval(() => this.getWaitQueue(), 1000)
   },
   methods: {
     add2Queue: function () {
@@ -155,8 +141,8 @@ export default {
         method: 'get',
         url: '/wait-queue/'
       }).then((res) => {
-        console.log(res.data)
-        this.rawQueue = res.data
+        this.rawQueue = res.data.department[localStorage.getItem('department')]
+        console.log(this.rawQueue)
       })
     }
   }

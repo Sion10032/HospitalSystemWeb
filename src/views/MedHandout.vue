@@ -28,7 +28,7 @@
           style="height: 40px;"
           v-for="item in selectItem.prescription.items"
           :key="item.id">
-          <div>{{ $store.getters.getMedicine(item.id) }}</div>
+          <div>{{ $store.getters.getMedicine(item.medicine) }}</div>
           <div>{{ item.count }}</div>
         </div>
         <div class="d-flex justify-space-between align-center" style="margin-top: 20px;">
