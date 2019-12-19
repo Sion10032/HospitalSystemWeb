@@ -118,6 +118,12 @@ export default {
           text: '配药',
           to: '/medhandout'
         })
+      } else if (this.isInGroup(234)) {
+        this.items.unshift({
+          icon: 'mdi-content-copy',
+          text: '分诊',
+          to: '/bookings'
+        })
       }
       this.isOk = true
     }
